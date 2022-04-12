@@ -34,6 +34,8 @@ public class Borrow {
 
     private Date returnDate; // วันที่คืน
 
+    private boolean isReturned; // คืนแล้วยัง
+
     public Borrow() {
     }
 
@@ -102,5 +104,11 @@ public class Borrow {
         this.returnDate = returnDate;
     }
 
-    
+    public boolean isReturned() {
+        return isReturned;
+    }
+
+    public void setReturned(boolean isReturned) {
+        this.isReturned = isReturned;
+    }
 }

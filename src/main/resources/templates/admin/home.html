@@ -4,9 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
     <title>Admin - Home page</title>
 </head>
 <body>
-    
+    <div class="container">
+        <h1 class="text-center">Admin - Menu</h1>
+        <div class="col-sm-6 offset-sm-3">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><a th:href="@{/admin/add-category}">Add new category</a></li>
+                <li class="list-group-item"><a th:href="@{/admin/books}">See books page</a></li>
+                <li class="list-group-item"><a th:href="@{/admin/borrow}">See borrows page</a></li>
+                <li class="list-group-item"><a class="btn btn-primary" th:href="@{/logout}">Logout</a></li>
+              </ul>
+        </div>
+    </div>
+
+
+
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

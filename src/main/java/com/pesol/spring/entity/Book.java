@@ -23,15 +23,15 @@ public class Book {
 
     private Integer inStock; // จำนวนในคลัง
 
-    private Double finRate; // ค่าปรับต่อวัน
+    private Double fineRate; // ค่าปรับต่อวัน
 
     public Book() {}
 
-    public Book(String name, BookCategory category, Integer inStock, Double finRate) {
+    public Book(String name, BookCategory category, Integer inStock, Double fineRate) {
         this.name = name;
         this.category = category;
         this.inStock = inStock;
-        this.finRate = finRate;
+        this.fineRate = fineRate;
     }
 
     public Integer getId() {
@@ -66,13 +66,11 @@ public class Book {
         this.inStock = inStock;
     }
 
-    public Double getFinRate() {
-        return finRate;
+    public Double getFineRate() {
+        return fineRate;
     }
 
-    public void setFinRate(Double finRate) {
-        this.finRate = finRate;
-    }
-
-    
+    public void setFineRate(Double fineRate) {
+        this.fineRate = fineRate;
+    }    
 }

@@ -43,6 +43,7 @@ public class UserController {
 				.getByUsernameOrEmail(registrationUser.getUsername(), registrationUser.getEmail());
 		
 		if (tempUser != null) {
+            model.addAttribute("registrationUser", new RegistrationUser());
 			model.addAttribute("errorMessage", "Username or Email is already exist");
             return "register";
 		}
