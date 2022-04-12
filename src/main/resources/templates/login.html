@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 class="text-center">User Login</h1>
+        <div>
+            <form class="row" th:action="@{/login}" method="post">
+
+                <!-- Registration success block -->
+                <div class="col-md-6 offset-md-3" th:if="${successMessage}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <th:block th:text="${successMessage}">
+                        </th:block>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <th:block th:text="${#session.removeAttribute('successMessage')}"></th:block>
+                    </div>
+                </div>
+
+                <!-- Error block -->
+                <div class="col-md-6 offset-md-3" th:if="${param.error}">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <th:block th:text="${'Invalid username or password'}">
+                        </th:block>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <!-- Logout success block -->
+                <div class="col-md-6 offset-md-3" th:if="${param.logout}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <th:block th:text="${'Logout successfully'}">
+                        </th:block>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 offset-md-3">
+                    <label class="form-label" for="username">Username</label>
+                    <input class="form-control" id="username" type="text" name="username">
+                </div>
+                <div class="col-md-6 offset-md-3 mb-2">
+                    <label class="form-label" for="password">Password</label>
+                    <input class="form-control" id="password" type="password" name="password">
+                </div>
+                <div class="col-md-6 offset-md-3 mb-2">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+
+                <div class="col-md-6 offset-md-3">
+                    <p><b>New User?</b> <a th:href="@{/registration}">Registration here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>
