@@ -1,5 +1,6 @@
 package com.pesol.spring.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,7 +19,12 @@ public class Book {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, 
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.REFRESH,
+                CascadeType.MERGE
+            })
     private BookCategory category; // หมดหมู่หนังสือ
 
     private Integer inStock; // จำนวนในคลัง
@@ -72,5 +78,11 @@ public class Book {
 
     public void setFineRate(Double fineRate) {
         this.fineRate = fineRate;
-    }    
+    }
+
+    @Override
+    public String toString() {
+        return "Book [category=" + category + ", fineRate=" + fineRate + ", id=" + id + ", inStock=" + inStock
+                + ", name=" + name + "]";
+    }
 }

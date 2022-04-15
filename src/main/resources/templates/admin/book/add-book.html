@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add - Book</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Add Book</h1>
+        <div>
+            <form class="row" th:action="@{/admin/book/add-book}" method="post"
+                th:object="${tempBookModel}">
+
+                <!-- Success block -->
+                <div class="col-md-6 offset-md-3" th:if="${param.success}">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <th:block th:text="${'Add book successfully'}">
+                        </th:block>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <!-- Error block -->
+                <div class="col-md-6 offset-md-3" th:if="${errorMessage}">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <th:block th:text="${errorMessage}">
+                        </th:block>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <div class="col-md-6 offset-md-3 mb-2">
+                    <label class="form-label" for="theName">Book Name</label>
+                    <input class="form-control" id="theName" type="text" th:field="*{name}">
+                    <div th:if="${#fields.hasErrors('name')}" class="form-text text-danger">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('name')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 offset-md-3 mb-2">
+                    <label class="form-label" for="inStock">In Stock Amount *(จำนวนเล่ม)</label>
+                    <input class="form-control" id="inStock" type="number" th:field="*{inStock}">
+                    <div th:if="${#fields.hasErrors('inStock')}" class="form-text text-danger">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('inStock')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 offset-md-3 mb-2">
+                    <label class="form-label" for="fineRate">Fine rate *(ค่าปรับต่อวัน)</label>
+                    <input class="form-control" id="fineRate" type="text" th:field="*{fineRate}">
+                    <div th:if="${#fields.hasErrors('fineRate')}" class="form-text text-danger">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('fineRate')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 offset-md-3 mb-2">
+                    <label class="form-label">Category *(หมวดหมู่)</label>
+                    <select class="form-control" th:field="*{categoryId}">
+                        <th:block th:each="c, state: ${tempCategories}">
+                            <option th:selected="${state.index == 0}" th:value="${c.id}" th:text="${c.name}">
+                            </option>
+                        </th:block>
+                    </select>
+                    <div th:if="${#fields.hasErrors('categoryId')}" class="form-text text-danger">
+                        <ul>
+                            <li th:each="error : ${#fields.errors('categoryId')}" th:text="${error}"></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-6 offset-md-3 mb-2">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
+
+                <div class="col-md-6 offset-md-3">
+                    <p><b>Go back?</b> <a th:href="@{/admin/book}">Back</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

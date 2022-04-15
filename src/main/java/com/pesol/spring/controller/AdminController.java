@@ -1,10 +1,17 @@
 package com.pesol.spring.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
+import com.pesol.spring.entity.Book;
 import com.pesol.spring.entity.BookCategory;
+import com.pesol.spring.model.BookModel;
 import com.pesol.spring.service.BookCategoryService;
+import com.pesol.spring.service.BookService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
+
     @Autowired
     private BookCategoryService bookCategoryService;
+
+    @Autowired
+    private BookService bookService;
     
     // For render admin home page
     @GetMapping
@@ -110,5 +122,59 @@ public class AdminController {
         }
 
         return "redirect:/admin/category?deleted";
+    }
+
+    @GetMapping("/book")
+    public String renderBooks(Model model) {
+        
+        model.addAttribute("books", bookService.getAll());
+
+        return "admin/book/home";
+    }
+
+    @GetMapping("/book/add-book")
+    public String renderAddBook(Model model) {
+
+        model.addAttribute("tempCategories", bookCategoryService.getAll());
+        
+        model.addAttribute("tempBookModel", new BookModel());
+
+        return "admin/book/add-book";
+    }
+
+    @PostMapping("/book/add-book")
+    public String processAddBook(@Valid @ModelAttribute(name = "tempBookModel") BookModel tempBookModel,
+            BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("tempCategories", bookCategoryService.getAll());
+            return "admin/book/add-book";
+        }
+
+        if (bookService.getByName(tempBookModel.getName()) != null) {
+            model.addAttribute("errorMessage", "Book " + tempBookModel.getName() + " is already exist");
+            model.addAttribute("tempCategories", bookCategoryService.getAll());
+            model.addAttribute("tempBookModel", new BookModel());
+            return "admin/book/add-book";
+        }
+
+        BookCategory category = bookCategoryService.getById(tempBookModel.getCategoryId());
+        if (category == null) {
+            model.addAttribute("errorMessage", "Please select the category");
+            model.addAttribute("tempCategories", bookCategoryService.getAll());
+            model.addAttribute("tempBookModel", new BookModel());
+            return "admin/book/add-book";
+        }
+
+        // if not has errors save it
+        Book book = new Book(
+            tempBookModel.getName(), 
+            category, 
+            tempBookModel.getInStock(), 
+            tempBookModel.getFineRate());
+
+        bookService.save(book);
+
+        return "redirect:/admin/book/add-book?success";
     }
 }
