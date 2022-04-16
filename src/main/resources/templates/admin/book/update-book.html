@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add - Book</title>
+    <title>Update - Book</title>
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 
@@ -14,9 +14,9 @@
     <div th:replace="index :: nav"></div>
 
     <div class="container">
-        <h1 class="text-center">Add Book</h1>
+        <h1 class="text-center">Update Book</h1>
         <div>
-            <form class="row" th:action="@{/admin/book/add-book}" method="post"
+            <form class="row" th:action="@{/admin/book/update}" method="post"
                 th:object="${tempBookModel}">
 
                 <!-- Success block -->
@@ -36,6 +36,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
+
+                <input type="hidden" th:field="*{id}">
 
                 <div class="col-md-6 offset-md-3 mb-2">
                     <label class="form-label" for="theName">Book Name</label>
@@ -71,7 +73,7 @@
                     <label class="form-label">Category *(หมวดหมู่)</label>
                     <select class="form-control" th:field="*{categoryId}">
                         <th:block th:each="c, state: ${tempCategories}">
-                            <option th:selected="${state.index == 0}" th:value="${c.id}" th:text="${c.name}">
+                            <option th:selected="${tempBookModel.categoryId== c.id}" th:value="${c.id}" th:text="${c.name}">
                             </option>
                         </th:block>
                     </select>

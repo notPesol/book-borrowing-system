@@ -10,6 +10,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import java.util.Set;
 
 import com.pesol.spring.service.UserService;
 
@@ -43,7 +47,8 @@ public class WebSecutityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/registration**",
+				.antMatchers("/",
+				"/registration**",
 								"/css/**",
 								"/js/**",
 								"/img/**").permitAll()

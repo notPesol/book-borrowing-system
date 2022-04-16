@@ -12,6 +12,9 @@
 </head>
 
 <body>
+
+    <div th:replace="index :: nav"></div>
+
     <div class="container">
         <h1 class="text-center">Book</h1>
         <div class="col-sm-10 offset-sm-1">
@@ -59,7 +62,7 @@
                             <form class="d-inline" th:action="@{/admin/book/{id}(id = ${book.id})}" method="get">
                                 <input class="btn btn-sm btn-warning" type="submit" value="Edit">
                             </form>
-                            <form th:data-category="${book.name}" class="d-inline form-delete" th:action="@{/admin/book/{id}(id = ${book.id})}" method="post">
+                            <form th:data-book="${book.name}" class="d-inline form-delete" th:action="@{/admin/book/{id}(id = ${book.id})}" method="post">
                                 <input class="btn btn-sm btn-danger" type="submit" value="Delete">
                             </form>
                         </td>
@@ -90,8 +93,8 @@
             form.addEventListener("submit", (event) => {
                 event.preventDefault();
 
-                const isConfirm = confirm(`Are you sure to delete ${form.dataset.category} book`);
-
+                const isConfirm = confirm(`Are you sure to delete ${form.dataset.book} book`);
+                                
                 if(isConfirm) {
                     form.submit();
                 }

@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Range;
 
 
 public class BookModel {
+
+    private Integer id;
     
     @NotBlank(message = "is required")
     private String name;
@@ -26,6 +28,20 @@ public class BookModel {
         this.inStock = 1;
         this.fineRate = 1.0D;
     }
+
+    
+
+    public Integer getId() {
+        return id;
+    }
+
+
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
 
     public String getName() {
         return name;

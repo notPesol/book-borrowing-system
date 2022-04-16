@@ -177,4 +177,82 @@ public class AdminController {
 
         return "redirect:/admin/book/add-book?success";
     }
+
+    // for render update book page
+    @GetMapping("/book/{id}")
+    public String renderUpdateBook(@PathVariable int id, Model model) {
+
+        Book tempBook = bookService.getById(id);
+
+        if (tempBook == null) {
+            return "redirect:/admin/book";
+        }
+
+        model.addAttribute("tempCategories", bookCategoryService.getAll());
+
+        BookModel tempBookModel = new BookModel();
+        tempBookModel.setId(tempBook.getId());
+        tempBookModel.setName(tempBook.getName());
+        tempBookModel.setCategoryId(tempBook.getCategory().getId());
+        tempBookModel.setFineRate(tempBook.getFineRate());
+        tempBookModel.setInStock(tempBook.getInStock());
+
+        model.addAttribute("tempBookModel", tempBookModel);
+
+        return "admin/book/update-book";
+    } 
+
+    @PostMapping("/book/update")
+    public String processUpdate(@Valid @ModelAttribute(name = "tempBookModel") BookModel tempBookModel,
+            BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("tempCategories", bookCategoryService.getAll());
+            return "admin/book/update-book";
+        }
+
+        Book tempBook = bookService.getByName(tempBookModel.getName());
+        if (tempBook != null && !tempBook.getName().equals(tempBookModel.getName())) {
+            model.addAttribute("errorMessage", "Book " + tempBookModel.getName() + " is already exist");
+            model.addAttribute("tempCategories", bookCategoryService.getAll());
+            model.addAttribute("tempBookModel", new BookModel());
+            return "admin/book/update-book";
+        }
+
+        BookCategory category = bookCategoryService.getById(tempBookModel.getCategoryId());
+        if (category == null) {
+            model.addAttribute("errorMessage", "Please select the category");
+            model.addAttribute("tempCategories", bookCategoryService.getAll());
+            model.addAttribute("tempBookModel", new BookModel());
+            return "admin/book/update-book";
+        }
+
+        // if not has errors save it
+        Book book = new Book(
+            tempBookModel.getName(), 
+            category, 
+            tempBookModel.getInStock(), 
+            tempBookModel.getFineRate());
+        // set update book id for update
+        book.setId(tempBookModel.getId());
+
+        bookService.save(book);
+
+        return "redirect:/admin/book?updated";
+    }
+
+    // for process delete the book by id
+    @PostMapping("/book/{id}")
+    public String processDeleteBook(@PathVariable int id) {
+
+        Book tempBook = bookService.getById(id);
+
+        if (tempBook == null) {
+            return "redirect:/admin/book";
+        }
+
+        bookService.delete(tempBook);
+
+        return "redirect:/admin/book?deleted";
+    } 
 }
