@@ -26,7 +26,6 @@ public class Borrow {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    private Integer quantity; // จำนวนที่ยืม
 
     private Date borrowDate; // วันที่ยืม
 
@@ -39,10 +38,9 @@ public class Borrow {
     public Borrow() {
     }
 
-    public Borrow(User user, Book book, Integer quantity, Date borrowDate, Date dueDate, Date returnDate) {
+    public Borrow(User user, Book book, Date borrowDate, Date dueDate, Date returnDate) {
         this.user = user;
         this.book = book;
-        this.quantity = quantity;
         this.borrowDate = borrowDate;
         this.dueDate = dueDate;
         this.returnDate = returnDate;
@@ -70,14 +68,6 @@ public class Borrow {
 
     public void setBook(Book book) {
         this.book = book;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
     }
 
     public Date getBorrowDate() {

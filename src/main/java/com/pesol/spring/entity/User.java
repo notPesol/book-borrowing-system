@@ -44,7 +44,9 @@ public class User {
 	
 	private String email;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = {
+		CascadeType.REMOVE
+	})
 	private List<Borrow> borrows = new ArrayList<>();
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

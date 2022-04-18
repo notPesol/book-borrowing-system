@@ -23,6 +23,17 @@ public class MyUserDetail extends User {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getClass().getName()).append(" [");
+		sb.append("Id=").append(getId()).append(", ");
+		sb.append("Username=").append(getUsername()).append(", ");
+		sb.append("Password=[PROTECTED], ");
+		sb.append("Granted Authorities=").append(getAuthorities()).append("]");
+		return sb.toString();
+	}
 	
 	
 

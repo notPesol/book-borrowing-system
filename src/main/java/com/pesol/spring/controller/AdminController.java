@@ -6,9 +6,12 @@ import javax.validation.Valid;
 
 import com.pesol.spring.entity.Book;
 import com.pesol.spring.entity.BookCategory;
+import com.pesol.spring.entity.User;
 import com.pesol.spring.model.BookModel;
 import com.pesol.spring.service.BookCategoryService;
 import com.pesol.spring.service.BookService;
+import com.pesol.spring.service.BorrowService;
+import com.pesol.spring.service.UserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +36,12 @@ public class AdminController {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private BorrowService borrowService;
     
     // For render admin home page
     @GetMapping
@@ -255,4 +264,35 @@ public class AdminController {
 
         return "redirect:/admin/book?deleted";
     } 
+
+    // for get users list
+    @GetMapping("/user")
+    public String renderUserList(Model model) {
+
+        model.addAttribute("users", userService.getAll());
+
+        return "admin/user/home";
+    }
+
+    // for process delete the user by id
+    @PostMapping("/user/{id}")
+    public String processDeleteUser(@PathVariable(name = "id") int id) {
+        User tempUser = userService.getById(id);
+        if (tempUser == null) {
+            return "redirect:/admin/user";
+        }
+
+        userService.delete(tempUser);
+
+        return "redirect:/admin/user?deleted";
+    }
+
+    // for get borrow list
+    @GetMapping("/borrow")
+    public String renderBorrowList(Model model) {
+
+        model.addAttribute("borrows", borrowService.getAll());
+
+        return "admin/borrow/home";
+    }
 }

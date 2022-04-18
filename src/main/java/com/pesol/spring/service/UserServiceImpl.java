@@ -1,5 +1,7 @@
 package com.pesol.spring.service;
 
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,4 +75,26 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findByUsernameOrEmail(username, email);
 	}
 
+	@Override
+	public void delete(User user) {
+		userRepository.delete(user);
+	}
+
+	@Override
+	public List<User> getAll() {
+		return userRepository.findByRoleName("ROLE_USER");
+	}
+
+	@Override
+	public User getById(int id) {
+		return userRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public void update(User user) {
+		userRepository.save(user);
+		
+	}
+
+	
 }

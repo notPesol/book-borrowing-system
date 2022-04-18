@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+    <title>Book page</title>
+</head>
+
+<body>
+
+    <div th:replace="index :: nav"></div>
+
+    <div class="container">
+        <h1 class="text-center">Book</h1>
+
+        <!-- Update Success block -->
+        <div class="col-md-6 offset-md-3" th:if="${param.updated}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <th:block th:text="${'Update the book successfully'}">
+                </th:block>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <!-- Delete Success block -->
+        <div class="col-md-6 offset-md-3" th:if="${param.deleted}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <th:block th:text="${'Delete the book successfully'}">
+                </th:block>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <div class="col-md-10 offset-md-1">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Book Name</th>
+                        <th scope="col">Book Category</th>
+                        <th scope="col">In stock *(จำนวนในคลัง)</th>
+                        <th scope="col">Fine rate *(อัตราค่าปรับต่อวัน)</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="book : ${books}">
+                        <td th:text="${book.name}"></td>
+                        <td th:text="${book.category.name}"></td>
+                        <td th:text="${book.inStock}"></td>
+                        <td th:text="${book.fineRate}"></td>
+                        <td>
+                            <form th:data-book="${book.name}" class="d-inline form-borrow" th:action="@{/book/{id}(id = ${book.id})}" method="post">
+                                <input class="btn btn-sm btn-primary" type="submit" value="Borrow">
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="6">Footer</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="col-md-10 offset-md-1">
+            <a th:href="@{/admin}">Back</a>
+        </div>
+    </div>
+
+    <div class="d-flex flex-row justify-content-center align-items-center">
+        <a class="btn btn-primary" th:href="@{/logout}">Logout</a>
+    </div>
+
+
+
+
+    <script>
+        const deleteForms = document.querySelectorAll(".form-borrow");
+        deleteForms.forEach(form => {
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                const isConfirm = confirm(`Are you sure to borrow ${form.dataset.book} book ?`);
+                                
+                if(isConfirm) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+
+
+
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>
