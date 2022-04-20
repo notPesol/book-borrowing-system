@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 
-    <title>Admin - Borrow page</title>
+    <title>Admin - Return book page</title>
 </head>
 
 <body>
@@ -16,7 +16,7 @@
     <div th:replace="index :: nav"></div>
 
     <div class="container">
-        <h1 class="text-center">Borrow</h1>
+        <h1 class="text-center">Return book</h1>
 
         <!-- Update Success block -->
         <div class="col-md-6 offset-md-3" th:if="${param.updated}">
@@ -46,25 +46,26 @@
                         <th scope="col">Borrow Date *(วันที่ยืม)</th>
                         <th scope="col">Due Date *(วันที่ต้องคืน)</th>
                         <th scope="col">Return Date *(วันที่คืน)</th>
+                        <th scope="col">Fine Value *(ค่าปรับทั้งสิ้น/บาท)</th>
                         <th scope="col">Status *(สถานะการคืน)</th>
+                        <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="b : ${borrows}">
-                        <th th:text="${b.id}" scope="row">1</th>
-                        <td th:text="${b.book.name}"></td>
-                        <td th:text="${b.user.username}"></td>
-                        <td th:text="${b.borrowDate}"></td>
-                        <td th:text="${b.dueDate}"></td>
-                        <td th:text="${b.returnDate}"></td>
-                        <td th:text="${b.isReturned}"></td>
+                    <tr>
+                        <th th:text="${borrow.id}" scope="row">1</th>
+                        <td th:text="${borrow.book.name}"></td>
+                        <td th:text="${borrow.user.username}"></td>
+                        <td th:text="${borrow.borrowDate}"></td>
+                        <td th:text="${borrow.dueDate}"></td>
+                        <td th:text="${borrow.returnDate}"></td>
+                        <td th:text="${fineValue}? fineValue : 'ไมมีค่าปรับ'"></td>
+                        <td th:text="${borrow.isReturned}"></td>
                         <td>
-                            <form class="d-inline" th:action="@{/admin/borrow/{id}(id = ${b.id})}" method="get">
-                                <input class="btn btn-sm btn-warning" type="submit" value="Process return">
+                            <form class="d-inline" th:action="@{/admin/return/{id}(id = ${borrow.id})}" method="post">
+                                <input class="btn btn-sm btn-warning" type="submit" value="Update">
                             </form>
-                            <form th:data-book="${b.id}" class="d-inline form-delete" th:action="@{/admin/borrow/{id}(id = ${b.id})}" method="post">
-                                <input class="btn btn-sm btn-danger" type="submit" value="Delete">
-                            </form>
+                            
                         </td>
                     </tr>
                 </tbody>

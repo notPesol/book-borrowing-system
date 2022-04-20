@@ -3,6 +3,7 @@ package com.pesol.spring.controller;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.pesol.spring.entity.Book;
 import com.pesol.spring.entity.Borrow;
@@ -12,6 +13,8 @@ import com.pesol.spring.service.BookService;
 import com.pesol.spring.service.BorrowService;
 import com.pesol.spring.service.UserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class MainController {
+
+    private static Logger logger = LoggerFactory.getLogger(MainController.class);
     
     @Autowired
     private BookService bookService;
@@ -53,32 +58,35 @@ public class MainController {
     public String processBorrowBook(@PathVariable int id, Model model, Authentication authentication) {
         
         Book book = bookService.getById(id);
+
         if (book != null && book.getInStock() > 0) {
+            boolean isBorrowed = false;
             MyUserDetail userDetail = (MyUserDetail) authentication.getPrincipal();
 
-            // TODO: ค่อยมาปรับปรุงและใส่ใน service เดียวกันดีกว่า
             User user = userService.getById(userDetail.getId());
             if(user != null) {
-                Borrow tempBorrow = new Borrow(
-                    user, 
-                    book, 
-                    Date.valueOf(LocalDate.now()), 
-                    Date.valueOf(LocalDate.now().plusDays(7)), 
-                    null);
-                
-                    System.out.println(tempBorrow);
-
-                borrowService.save(tempBorrow);
-
-                book.setInStock(book.getInStock() - 1);
-                bookService.save(book);
+                // send to borrow service and process it
+                isBorrowed = borrowService.borrow(user, book);
             }
 
-           
-            return "redirect:/book";
+            if (isBorrowed) {
+                return "redirect:/book?success";
+            }else {
+                return "redirect:/book?failed";
+            }
         }
 
+        return "redirect:/book";
+    }
 
-        return "redirect:/book?success";
+    @GetMapping("/borrow")
+    public String renderBorrow(Model model, Authentication authentication) {
+
+        MyUserDetail userDetail = (MyUserDetail) authentication.getPrincipal();
+        User user = userService.getById(userDetail.getId());
+        List<Borrow> borrows = user.getBorrows();
+        model.addAttribute("borrows", borrows);
+
+        return "borrow";
     }
 }

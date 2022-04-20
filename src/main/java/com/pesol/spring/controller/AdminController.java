@@ -1,17 +1,22 @@
 package com.pesol.spring.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import com.pesol.spring.entity.Book;
 import com.pesol.spring.entity.BookCategory;
+import com.pesol.spring.entity.Borrow;
 import com.pesol.spring.entity.User;
 import com.pesol.spring.model.BookModel;
 import com.pesol.spring.service.BookCategoryService;
 import com.pesol.spring.service.BookService;
 import com.pesol.spring.service.BorrowService;
 import com.pesol.spring.service.UserService;
+import com.pesol.spring.util.DateRangeValidate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -294,5 +299,34 @@ public class AdminController {
         model.addAttribute("borrows", borrowService.getAll());
 
         return "admin/borrow/home";
+    }
+
+    // for render process return page
+    @GetMapping("/borrow/{id}")
+    public String renderReturnPage(@PathVariable int id, Model model) {
+
+        Borrow borrow = borrowService.getById(id);
+        if(borrow == null) {
+            return "redirect:/admin/borrow";
+        }
+        
+        // TODO: process return and more ....
+        Date returnDate = Date.valueOf(LocalDate.now());
+        borrow.setReturnDate(returnDate);
+
+        Date dueDate = borrow.getDueDate();
+        DateRangeValidate dateRangeValidate = new DateRangeValidate(borrow.getBorrowDate(), dueDate);
+        boolean isWithinRange = dateRangeValidate.isWithinRange(returnDate);
+
+        if (!isWithinRange) {
+            long diff = returnDate.getTime() - dueDate.getTime();
+            long diffDay = (diff / (1000 * 60 * 60 * 24));
+            model.addAttribute("fineValue", borrow.getBook().getFineRate() * diffDay);
+        }
+
+
+        model.addAttribute("borrow", borrow);
+
+        return "admin/borrow/return";
     }
 }

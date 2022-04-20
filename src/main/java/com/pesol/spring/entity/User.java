@@ -151,4 +151,12 @@ public class User {
 		this.borrows.add(borrow);
 	}
 
+	@Override
+	public String toString() {
+		return "User [email=" + email + ", firstName=" + firstName + ", id=" + id + ", lastName=" + lastName
+				+ ", password=PROTECTED" + ", roles=" + roles + ", username=" + username + "]";
+	}
+
+
+	
 }

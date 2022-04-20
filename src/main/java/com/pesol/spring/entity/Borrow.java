@@ -101,4 +101,12 @@ public class Borrow {
     public void setReturned(boolean isReturned) {
         this.isReturned = isReturned;
     }
+
+    @Override
+    public String toString() {
+        return "Borrow [book=" + book + ", borrowDate=" + borrowDate + ", dueDate=" + dueDate + ", id=" + id
+                + ", isReturned=" + isReturned + ", returnDate=" + returnDate + ", user=" + user + "]";
+    }
+
+    
 }

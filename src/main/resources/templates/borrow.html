@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
 
-    <title>Admin - Borrow page</title>
+    <title>Borrow list</title>
 </head>
 
 <body>
@@ -16,21 +16,21 @@
     <div th:replace="index :: nav"></div>
 
     <div class="container">
-        <h1 class="text-center">Borrow</h1>
+        <h1 class="text-center">Borrow list</h1>
 
         <!-- Update Success block -->
-        <div class="col-md-6 offset-md-3" th:if="${param.updated}">
+        <div class="col-md-6 offset-md-3" th:if="${param.success}">
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <th:block th:text="${'Update the borrow successfully'}">
+                <th:block th:text="${'Borrow successfully'}">
                 </th:block>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         </div>
 
         <!-- Delete Success block -->
-        <div class="col-md-6 offset-md-3" th:if="${param.deleted}">
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <th:block th:text="${'Delete the borrow successfully'}">
+        <div class="col-md-6 offset-md-3" th:if="${param.failed}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <th:block th:text="${'Could not borrow the book you must return first'}">
                 </th:block>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -40,9 +40,8 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">#Borrow Id</th>
                         <th scope="col">Book Name</th>
-                        <th scope="col">Username *(ชื่อผู้ใช้)</th>
                         <th scope="col">Borrow Date *(วันที่ยืม)</th>
                         <th scope="col">Due Date *(วันที่ต้องคืน)</th>
                         <th scope="col">Return Date *(วันที่คืน)</th>
@@ -51,27 +50,23 @@
                 </thead>
                 <tbody>
                     <tr th:each="b : ${borrows}">
-                        <th th:text="${b.id}" scope="row">1</th>
+                        <th scope="row" th:text="${b.id}"></th>
                         <td th:text="${b.book.name}"></td>
-                        <td th:text="${b.user.username}"></td>
                         <td th:text="${b.borrowDate}"></td>
                         <td th:text="${b.dueDate}"></td>
                         <td th:text="${b.returnDate}"></td>
                         <td th:text="${b.isReturned}"></td>
-                        <td>
-                            <form class="d-inline" th:action="@{/admin/borrow/{id}(id = ${b.id})}" method="get">
-                                <input class="btn btn-sm btn-warning" type="submit" value="Process return">
-                            </form>
-                            <form th:data-book="${b.id}" class="d-inline form-delete" th:action="@{/admin/borrow/{id}(id = ${b.id})}" method="post">
-                                <input class="btn btn-sm btn-danger" type="submit" value="Delete">
-                            </form>
-                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
         <div class="col-md-10 offset-md-1">
-            <a th:href="@{/admin}">Back</a>
+            *โปรดบอก <strong>รหัสการยืม/ชื่อผู้ใช้</strong> สำหรับการคืนหนัง
+        </div>
+
+        <div class="col-md-10 offset-md-1">
+            <a th:href="@{/book}">Book</a>
         </div>
     </div>
 
@@ -83,12 +78,12 @@
 
 
     <script>
-        const deleteForms = document.querySelectorAll(".form-delete");
+        const deleteForms = document.querySelectorAll(".form-borrow");
         deleteForms.forEach(form => {
             form.addEventListener("submit", (event) => {
                 event.preventDefault();
 
-                const isConfirm = confirm(`Are you sure to delete ${form.dataset.book} borrow`);
+                const isConfirm = confirm(`Are you sure to borrow ${form.dataset.book} book ?`);
                                 
                 if(isConfirm) {
                     form.submit();

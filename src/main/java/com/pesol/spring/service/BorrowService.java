@@ -2,7 +2,9 @@ package com.pesol.spring.service;
 
 import java.util.List;
 
+import com.pesol.spring.entity.Book;
 import com.pesol.spring.entity.Borrow;
+import com.pesol.spring.entity.User;
 
 public interface BorrowService {
     
@@ -15,4 +17,6 @@ public interface BorrowService {
     void save(Borrow borrow);
 
     void update(Borrow borrow);
+
+    boolean borrow(User user, Book book);
 }
