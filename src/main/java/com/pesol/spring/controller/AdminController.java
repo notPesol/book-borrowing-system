@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin")
@@ -294,9 +295,20 @@ public class AdminController {
 
     // for get borrow list
     @GetMapping("/borrow")
-    public String renderBorrowList(Model model) {
+    public String renderBorrowList(@RequestParam(name = "sort", required = false, defaultValue = "false") boolean sort,
+            Model model) {
 
-        model.addAttribute("borrows", borrowService.getAll());
+        List<Borrow> borrows = borrowService.getAll();
+
+        if(sort) {
+            borrows.sort((b1, b2) -> {
+                if(b1.isReturned()) {
+                    return 1;
+                }
+                return -1;
+            });
+        }
+        model.addAttribute("borrows", borrows);
 
         return "admin/borrow/home";
     }
@@ -310,7 +322,6 @@ public class AdminController {
             return "redirect:/admin/borrow";
         }
         
-        // TODO: process return and more ....
         Date returnDate = Date.valueOf(LocalDate.now());
         borrow.setReturnDate(returnDate);
 
@@ -328,5 +339,27 @@ public class AdminController {
         model.addAttribute("borrow", borrow);
 
         return "admin/borrow/return";
+    }
+
+    @PostMapping("/return/{id}")
+    public String processReturn(@PathVariable int id, @RequestParam(name = "returnDate") Date returnDate) {
+        LOGGER.info(returnDate.toString());
+
+        Borrow borrow = borrowService.getById(id);
+        if(borrow == null) {
+            return "redirect:/admin/borrow";
+        }
+        
+        borrow.setReturnDate(returnDate);
+        borrow.setReturned(true);
+
+        Book book = borrow.getBook();
+        book.setInStock(book.getInStock() + 1);
+
+        LOGGER.info(borrow.toString());
+
+        borrowService.save(borrow);
+
+        return "redirect:/admin/borrow";
     }
 }

@@ -3,6 +3,7 @@ package com.pesol.spring.controller;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 import com.pesol.spring.entity.Book;
@@ -22,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -80,11 +82,22 @@ public class MainController {
     }
 
     @GetMapping("/borrow")
-    public String renderBorrow(Model model, Authentication authentication) {
+    public String renderBorrow(@RequestParam(name = "sort", required = false, defaultValue = "false") boolean sort,
+             Model model, Authentication authentication) {
 
         MyUserDetail userDetail = (MyUserDetail) authentication.getPrincipal();
         User user = userService.getById(userDetail.getId());
         List<Borrow> borrows = user.getBorrows();
+
+        if(sort) {
+            borrows.sort((b1, b2) -> {
+                if(b1.isReturned()) {
+                    return 1;
+                }
+                return -1;
+            });
+        }
+
         model.addAttribute("borrows", borrows);
 
         return "borrow";

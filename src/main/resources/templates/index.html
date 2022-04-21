@@ -33,7 +33,7 @@
 
             <li class="nav-item" sec:authorize="hasRole('USER')">
               <a th:class="${'nav-link ' + (#httpServletRequest.requestURI == '/book' ? 'active disabled' : '')}"
-                aria-current="page" th:href="@{/book}">Book list</a>
+                aria-current="page" th:href="@{/book}">Book</a>
             </li>
 
             <!-- render for role user -->
@@ -44,7 +44,6 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" th:href="@{/borrow}">Borrow list</a></li>
-                <li><a class="dropdown-item" href="#">Another action</a></li>
                 <li>
                   <hr class="dropdown-divider">
                 </li>

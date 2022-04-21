@@ -46,7 +46,7 @@
                         <th scope="col">Borrow Date *(วันที่ยืม)</th>
                         <th scope="col">Due Date *(วันที่ต้องคืน)</th>
                         <th scope="col">Return Date *(วันที่คืน)</th>
-                        <th scope="col">Fine Value *(ค่าปรับทั้งสิ้น/บาท)</th>
+                        <th scope="col">Fine Value *(ค่าปรับ/บาท)</th>
                         <th scope="col">Status *(สถานะการคืน)</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -63,6 +63,7 @@
                         <td th:text="${borrow.isReturned}"></td>
                         <td>
                             <form class="d-inline" th:action="@{/admin/return/{id}(id = ${borrow.id})}" method="post">
+                                <input type="hidden" name="returnDate" th:value="${borrow.returnDate}">
                                 <input class="btn btn-sm btn-warning" type="submit" value="Update">
                             </form>
                             
@@ -71,8 +72,13 @@
                 </tbody>
             </table>
         </div>
+
         <div class="col-md-10 offset-md-1">
-            <a th:href="@{/admin}">Back</a>
+            *อย่าลืม <strong>ตรวจสอบค่าปรับ</strong> ของผู้ใช้
+        </div>
+
+        <div class="col-md-10 offset-md-1">
+            <a th:href="@{/admin/borrow}">Back</a>
         </div>
     </div>
 

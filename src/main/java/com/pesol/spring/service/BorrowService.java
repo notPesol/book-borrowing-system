@@ -16,7 +16,5 @@ public interface BorrowService {
 
     void save(Borrow borrow);
 
-    void update(Borrow borrow);
-
     boolean borrow(User user, Book book);
 }

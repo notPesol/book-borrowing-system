@@ -46,7 +46,7 @@
                         <th scope="col">Borrow Date *(วันที่ยืม)</th>
                         <th scope="col">Due Date *(วันที่ต้องคืน)</th>
                         <th scope="col">Return Date *(วันที่คืน)</th>
-                        <th scope="col">Status *(สถานะการคืน)</th>
+                        <th scope="col"><a th:href="@{/admin/borrow?sort=true}">Status *(สถานะการคืน)</a></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,8 +59,8 @@
                         <td th:text="${b.returnDate}"></td>
                         <td th:text="${b.isReturned}"></td>
                         <td>
-                            <form class="d-inline" th:action="@{/admin/borrow/{id}(id = ${b.id})}" method="get">
-                                <input class="btn btn-sm btn-warning" type="submit" value="Process return">
+                            <form th:if="${not b.isReturned}" class="d-inline" th:action="@{/admin/borrow/{id}(id = ${b.id})}" method="get">
+                                <input class="btn btn-sm btn-warning" type="submit" value="Return">
                             </form>
                             <form th:data-book="${b.id}" class="d-inline form-delete" th:action="@{/admin/borrow/{id}(id = ${b.id})}" method="post">
                                 <input class="btn btn-sm btn-danger" type="submit" value="Delete">

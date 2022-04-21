@@ -49,12 +49,6 @@ public class BorrowServiceImpl implements BorrowService {
     }
 
     @Override
-    public void update(Borrow borrow) {
-        borrowRepository.save(borrow);
-
-    }
-
-    @Override
     public boolean borrow(User user, Book book) {
 
         List<Borrow> borrows = user.getBorrows();
